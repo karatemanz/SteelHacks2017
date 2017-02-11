@@ -11,7 +11,7 @@
     tools:context="jon.transmed.Record">
 
     <Button
-        android:text="Button"
+        android:text="Export Results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button"
@@ -20,11 +20,40 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
+        android:text="Heart Rate: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_below="@+id/TextBP"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/TextHR" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vitals"
+        android:id="@+id/TextView1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:id="@+id/TextView1" />
+        android:textSize="30sp" />
+
+    <TextView
+        android:text="Blood Pressure: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextBP"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/TextView1"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Respiration: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:id="@+id/TextRE"
+        android:layout_below="@+id/TextHR"
+        android:layout_alignLeft="@+id/TextView1"
+        android:layout_alignStart="@+id/TextView1" />
 </RelativeLayout>

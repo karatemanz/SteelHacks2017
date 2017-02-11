@@ -24,14 +24,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 
 public class Record extends Activity
 {
 
-    private TextView mText;
+    private TextView mText, BPText, HRText, REText;
     private SpeechRecognizer sr;
-    private static final String TAG = "MyStt3Activity";
-    private ArrayList<String[]> keyWords = new ArrayList<>();
+    private static final String TAG = "Recognition";
+    private String bloodPressure;
     private SensorManager mSensorManager;
     private float mAccel; // acceleration apart from gravity
     private float mAccelCurrent; // current acceleration including gravity
@@ -45,7 +47,7 @@ public class Record extends Activity
             mAccelLast = mAccelCurrent;
             mAccelCurrent = (float) Math.sqrt((double) (x*x + y*y + z*z));
             float delta = mAccelCurrent - mAccelLast;
-            if(Math.abs(delta) > 15)
+            if(Math.abs(delta) > 20)
             {
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -91,6 +93,10 @@ public class Record extends Activity
         }
 
         mText = (TextView) findViewById(R.id.TextView1);
+        BPText = (TextView) findViewById(R.id.TextBP);
+        HRText = (TextView) findViewById(R.id.TextHR);
+        REText = (TextView) findViewById(R.id.TextRE);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
         mAccel = 0.00f;
@@ -125,7 +131,7 @@ public class Record extends Activity
         public void onError(int error)
         {
             Log.d(TAG,  "error " +  error);
-            mText.setText("error " + error);
+            //mText.setText("error " + error);
         }
         public void onResults(Bundle results)
         {
@@ -135,10 +141,57 @@ public class Record extends Activity
             for (int i = 0; i < data.size(); i++)
             {
                 Log.d(TAG, "result " + data.get(i));
+                parseSpeech((String)data.get(i));
                 str += data.get(i);
             }
-            mText.setText("results: "+String.valueOf(data.size()));
+           // mText.setText("results: "+String.valueOf(data.size()));
         }
+
+        private void parseSpeech(String data) {
+
+            String[] fragment = data.split(" ");
+            Log.i(TAG, "Parsing Speech");
+
+            for(int i = 0; i < fragment.length; i++){
+
+                if(fragment.length >= 5) {
+                    if (fragment[i].contains("blood") && fragment[i + 1].contains("pressure") && fragment[i + 2].matches("\\d+") && (fragment[i + 3].contains("over") || fragment[i + 3].contains("/")) && fragment[i + 4].matches("\\d+")) {
+
+                        bloodPressure = fragment[i + 2] + " / " + fragment[i + 4];
+                        BPText.setText("Blood Pressure: " + bloodPressure);
+                    }
+                }
+                if(fragment.length >= 4) {
+                    if (fragment[i].contains("BP") && fragment[i + 1].matches("\\d+") && (fragment[i + 2].contains("over") || fragment[i + 2].contains("/")) && fragment[i + 3].matches("\\d+")) {
+
+                        bloodPressure = fragment[i + 1] + " / " + fragment[i + 3];
+                        BPText.setText("Blood Pressure: " + bloodPressure);
+                    }
+                }
+
+                if(fragment.length >= 3) {
+                    if(fragment[i].contains("heart") && fragment[i+1].contains("rate") && fragment[i+2].matches("\\d+")){
+                        String heartRate = fragment[i+2];
+                        HRText.setText("Heart Rate: " + heartRate);
+                    }
+                }
+
+                if(fragment.length >= 2) {
+                    if(fragment[i].contains("HR") && fragment[i+1].matches("\\d+")) {
+                        String heartRate = fragment[i] + fragment[i+1];
+                        HRText.setText("Heart Rate: " + heartRate);
+                    }
+                    else if(fragment[i].contains("respiration") && fragment[i+1].matches("\\d+")){
+                        String respir = fragment[i+1];
+                        REText.setText("Respiration: " + respir);
+                    }
+                }
+
+            }
+
+
+        }
+
         public void onPartialResults(Bundle partialResults)
         {
             Log.d(TAG, "onPartialResults");
