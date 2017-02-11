@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class Record extends Activity
 {
 
-    private TextView mText, BPText, HRText, REText;
+    private TextView mText, BPText, HRText, REText, TEMPText, OXText;
     private SpeechRecognizer sr;
     private static final String TAG = "Recognition";
     private String bloodPressure;
@@ -96,6 +96,8 @@ public class Record extends Activity
         BPText = (TextView) findViewById(R.id.TextBP);
         HRText = (TextView) findViewById(R.id.TextHR);
         REText = (TextView) findViewById(R.id.TextRE);
+        TEMPText = (TextView) findViewById(R.id.TextTEMP);
+        OXText = (TextView) findViewById(R.id.TextOX);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -174,6 +176,11 @@ public class Record extends Activity
                         String heartRate = fragment[i+2];
                         HRText.setText("Heart Rate: " + heartRate);
                     }
+                    else if(fragment[i].contains("pulse") && fragment[i+1].contains("oxygen") && fragment[i+2].matches("\\d+"))
+                    {
+                        String pulseOX = fragment[i+2];
+                        OXText.setText("Pulse OX: " + pulseOX);
+                    }
                 }
 
                 if(fragment.length >= 2) {
@@ -184,6 +191,11 @@ public class Record extends Activity
                     else if(fragment[i].contains("respiration") && fragment[i+1].matches("\\d+")){
                         String respir = fragment[i+1];
                         REText.setText("Respiration: " + respir);
+                    }
+                    else if(fragment[i].contains("temperature") && fragment[i+1].matches("\\d+\\.\\d+"))
+                    {
+                        String temperature = fragment[i+1];
+                        TEMPText.setText("Temperature: " + temperature);
                     }
                 }
 

@@ -56,4 +56,23 @@
         android:layout_below="@+id/TextHR"
         android:layout_alignLeft="@+id/TextView1"
         android:layout_alignStart="@+id/TextView1" />
+
+    <TextView
+        android:text="Temperature: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextRE"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/TextTEMP" />
+
+    <TextView
+        android:text="Pulse Oxygen: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:id="@+id/TextOX"
+        android:layout_below="@+id/TextTEMP"
+        android:layout_alignLeft="@+id/TextTEMP"
+        android:layout_alignStart="@+id/TextTEMP" />
 </RelativeLayout>
