@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class Record extends Activity
 {
 
-    private TextView mText, BPText, HRText, REText, TEMPText, OXText;
+    private TextView mText, BPText, HRText, REText, TEMPText, OXText, RecText;
     private SpeechRecognizer sr;
     private static final String TAG = "Recognition";
     private String bloodPressure;
@@ -49,6 +49,7 @@ public class Record extends Activity
             float delta = mAccelCurrent - mAccelLast;
             if(Math.abs(delta) > 20)
             {
+                RecText.setText("Recording");
                 Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
                 intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
@@ -98,6 +99,7 @@ public class Record extends Activity
         REText = (TextView) findViewById(R.id.TextRE);
         TEMPText = (TextView) findViewById(R.id.TextTEMP);
         OXText = (TextView) findViewById(R.id.TextOX);
+        RecText = (TextView) findViewById(R.id.TextRecord);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -137,6 +139,7 @@ public class Record extends Activity
         }
         public void onResults(Bundle results)
         {
+            RecText.setText("Not Recording");
             String str = new String();
             Log.d(TAG, "onResults " + results);
             ArrayList data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -179,7 +182,7 @@ public class Record extends Activity
                     else if(fragment[i].contains("pulse") && fragment[i+1].contains("oxygen") && fragment[i+2].matches("\\d+"))
                     {
                         String pulseOX = fragment[i+2];
-                        OXText.setText("Pulse OX: " + pulseOX);
+                        OXText.setText("Pulse Oxygen: " + pulseOX);
                     }
                 }
 

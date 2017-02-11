@@ -75,4 +75,13 @@
         android:layout_below="@+id/TextTEMP"
         android:layout_alignLeft="@+id/TextTEMP"
         android:layout_alignStart="@+id/TextTEMP" />
+
+    <TextView
+        android:text="Not Recording"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="49dp"
+        android:id="@+id/TextRecord"
+        android:layout_below="@+id/TextOX"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
